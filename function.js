@@ -136,7 +136,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 	  <style>${customCSS}</style>
 	  <div class="main">
 	  <div class="header">
-		<button class="button" id="download">Baixar</button>
+		<button class="button" id="download">Baixar o Laudo</button>
 	  </div>
 	  <div id="content">${html}</div>
 	  </div>
