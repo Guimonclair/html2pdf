@@ -136,7 +136,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 	  <style>${customCSS}</style>
 	  <div class="main">
 	  <div class="header">
-		<button class="button" id="download">Download</button>
+		<button class="button" id="download">Baixar</button>
 	  </div>
 	  <div id="content">${html}</div>
 	  </div>
@@ -144,7 +144,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 	  document.getElementById('download').addEventListener('click', function() {
 		var element = document.getElementById('content');
 		var button = this;
-		button.innerText = 'Downloading...';
+		button.innerText = 'Baixando...';
 		button.className = 'downloading';
   
 		var opt = {
@@ -163,7 +163,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 		}
 		};
 		html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
-		button.innerText = 'Done 🎉';
+		button.innerText = 'Feito 🎉';
 		button.className = 'done';
 		setTimeout(function() { 
 		  button.innerText = 'Download';
