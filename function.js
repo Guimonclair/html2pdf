@@ -166,7 +166,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 		button.innerText = 'Feito 🎉';
 		button.className = 'done';
 		setTimeout(function() { 
-		  button.innerText = 'Download';
+		  button.innerText = 'Baixar';
 		  button.className = ''; 
 		}, 2000);
 		}).save();
