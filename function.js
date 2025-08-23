@@ -113,11 +113,11 @@ html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
   formData.append('file', namedBlob);
   formData.append('upload_preset', 'glide_pdf');
   formData.append('public_id', fileName);
-  formData.append('resource_type', 'raw');
+  formData.append('resource_type', 'raw'); // opcional, pois auto detecta
 
   console.log('🚀 Enviando para Cloudinary com public_id:', fileName);
 
-  fetch('https://api.cloudinary.com/v1_1/guimonclair/raw/upload', {
+  fetch('https://api.cloudinary.com/v1_1/guimonclair/auto/upload', {
     method: 'POST',
     body: formData
   })
