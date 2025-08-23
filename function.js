@@ -64,8 +64,6 @@ window.function = function (
       background: #f5f5f5;
       box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06), 0 6px 12px -3px rgba(0, 0, 0, 0.1);
     }
-    button#download.downloading { color: #ea580c; }
-    button#download.done { color: #16a34a; }
     ::-webkit-scrollbar { width: 5px; background-color: rgb(0 0 0 / 8%); }
     ::-webkit-scrollbar-thumb { background-color: rgb(0 0 0 / 32%); border-radius: 4px; }
   `;
@@ -80,83 +78,33 @@ window.function = function (
       <div id="content">${html}</div>
     </div>
     <script>
-      function gerarPDF(element, button) {
-        var opt = {
-          pagebreak: {
-            mode: ['css'],
-            before: ${JSON.stringify(breakBefore)},
-            after: ${JSON.stringify(breakAfter)},
-            avoid: ${JSON.stringify(breakAvoid)}
-          },
-          margin: ${margin},
-          filename: ${JSON.stringify(fileName)} + '.pdf',
-          html2canvas: {
-            useCORS: true,
-            scale: ${quality}
-          },
-          jsPDF: {
-            unit: 'px',
-            orientation: '${orientation}',
-            format: [${finalDimensions}],
-            hotfixes: ['px_scaling']
-          }
-        };
-
-html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
-  console.log('📦 PDF gerado como blob:', pdfBlob);
-
-  const namedBlob = new File([pdfBlob], fileName + ".pdf", {
-    type: "application/pdf"
-  });
-
-  const formData = new FormData();
-  formData.append('file', namedBlob);
-  formData.append('upload_preset', 'glide_pdf');
-  formData.append('public_id', fileName);
-  formData.append('resource_type', 'raw'); // opcional, pois auto detecta
-
-  console.log('🚀 Enviando para Cloudinary com public_id:', fileName);
-
-  fetch('https://api.cloudinary.com/v1_1/guimonclair/auto/upload', {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => {
-    console.log('📡 Resposta recebida:', res);
-    return res.json();
-  })
-  .then(data => {
-    console.log('✅ Upload concluído:', data);
-    if (button) {
-      button.innerText = 'Feito 🎉';
-      button.className = 'done';
-      setTimeout(() => {
-        button.innerText = 'Baixar';
-        button.className = '';
-      }, 2000);
-    }
-  })
-  .catch(err => {
-    console.error('❌ Erro ao enviar PDF:', err);
-    if (button) {
-      button.innerText = 'Erro ❌';
-      button.className = 'error';
-    }
-  });
-});
-
       document.addEventListener('DOMContentLoaded', function () {
         var element = document.getElementById('content');
         var button = document.getElementById('download');
 
-        // Geração automática ao carregar
-        gerarPDF(element, null);
-
-        // Geração manual via botão
         button.addEventListener('click', function () {
-          button.innerText = 'Baixando...';
-          button.className = 'downloading';
-          gerarPDF(element, button);
+          var opt = {
+            pagebreak: {
+              mode: ['css'],
+              before: ${JSON.stringify(breakBefore)},
+              after: ${JSON.stringify(breakAfter)},
+              avoid: ${JSON.stringify(breakAvoid)}
+            },
+            margin: ${margin},
+            filename: ${JSON.stringify(fileName)} + '.pdf',
+            html2canvas: {
+              useCORS: true,
+              scale: ${quality}
+            },
+            jsPDF: {
+              unit: 'px',
+              orientation: '${orientation}',
+              format: [${finalDimensions}],
+              hotfixes: ['px_scaling']
+            }
+          };
+
+          html2pdf().set(opt).from(element).save();
         });
       });
     </script>
