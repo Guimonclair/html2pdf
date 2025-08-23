@@ -102,42 +102,48 @@ window.function = function (
           }
         };
 
-        html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
-          const namedBlob = new File([pdfBlob], ${JSON.stringify(fileName)} + ".pdf", {
-            type: "application/pdf"
-          });
+html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
+  console.log('📦 PDF gerado como blob:', pdfBlob);
 
-          const formData = new FormData();
-          formData.append('file', namedBlob);
-          formData.append('upload_preset', 'glide_pdf');
-          formData.append('public_id', ${JSON.stringify(fileName)});
-          formData.append('resource_type', 'raw');
+  const namedBlob = new File([pdfBlob], fileName + ".pdf", {
+    type: "application/pdf"
+  });
 
-          fetch('https://api.cloudinary.com/v1_1/guimonclair/raw/upload', {
-            method: 'POST',
-            body: formData
-          })
-          .then(res => res.json())
-          .then(data => {
-            console.log('✅ PDF enviado para Cloudinary:', data.secure_url);
-            if (button) {
-              button.innerText = 'Feito 🎉';
-              button.className = 'done';
-              setTimeout(() => {
-                button.innerText = 'Baixar';
-                button.className = '';
-              }, 2000);
-            }
-          })
-          .catch(err => {
-            console.error('❌ Erro ao enviar PDF:', err);
-            if (button) {
-              button.innerText = 'Erro ❌';
-              button.className = 'error';
-            }
-          });
-        });
-      }
+  const formData = new FormData();
+  formData.append('file', namedBlob);
+  formData.append('upload_preset', 'glide_pdf');
+  formData.append('public_id', fileName);
+  formData.append('resource_type', 'raw');
+
+  console.log('🚀 Enviando para Cloudinary com public_id:', fileName);
+
+  fetch('https://api.cloudinary.com/v1_1/guimonclair/raw/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => {
+    console.log('📡 Resposta recebida:', res);
+    return res.json();
+  })
+  .then(data => {
+    console.log('✅ Upload concluído:', data);
+    if (button) {
+      button.innerText = 'Feito 🎉';
+      button.className = 'done';
+      setTimeout(() => {
+        button.innerText = 'Baixar';
+        button.className = '';
+      }, 2000);
+    }
+  })
+  .catch(err => {
+    console.error('❌ Erro ao enviar PDF:', err);
+    if (button) {
+      button.innerText = 'Erro ❌';
+      button.className = 'error';
+    }
+  });
+});
 
       document.addEventListener('DOMContentLoaded', function () {
         var element = document.getElementById('content');
