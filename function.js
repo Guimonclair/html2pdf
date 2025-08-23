@@ -106,9 +106,10 @@ window.function = function (
           const formData = new FormData();
           formData.append('file', pdfBlob);
           formData.append('upload_preset', 'glide_pdf');
-          formData.append('public_id', ${JSON.stringify(fileName)}); // nome vindo do Glide
+          formData.append('public_id', ${JSON.stringify(fileName)});
+          formData.append('resource_type', 'raw');
 
-          fetch('https://api.cloudinary.com/v1_1/guimonclair/auto/upload', {
+          fetch('https://api.cloudinary.com/v1_1/guimonclair/raw/upload', {
             method: 'POST',
             body: formData
           })
