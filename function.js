@@ -103,8 +103,12 @@ window.function = function (
         };
 
         html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
+          const namedBlob = new File([pdfBlob], ${JSON.stringify(fileName)} + ".pdf", {
+            type: "application/pdf"
+          });
+
           const formData = new FormData();
-          formData.append('file', pdfBlob);
+          formData.append('file', namedBlob);
           formData.append('upload_preset', 'glide_pdf');
           formData.append('public_id', ${JSON.stringify(fileName)});
           formData.append('resource_type', 'raw');
